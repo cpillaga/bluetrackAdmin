@@ -1,0 +1,40 @@
+<nav class="navbar navbar-transparent navbar-absolute">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" routerLink="/login">
+            <img src="assets/img/blue/blueTrack.png" /></a>
+        </div>
+    </div>
+</nav>
+
+<div class="wrapper wrapper-full-page">
+    <div class="full-page login-page" data-color="bluetrack" data-image="assets/img/loginBG.jpg">
+
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
+                        <form #f="ngForm" id="loginform" (ngSubmit)="login(f)">
+                            <div class="card card-hidden">
+                                <div class="header text-center">Login</div>
+                                <div class="content">
+                                    <div class="form-group">
+                                        <label>Usuario</label>
+                                        <input type="email" id="email" name="email" [ngModel]="email" autocomplete="off" placeholder="Ingrese usuario..." class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Contraseña</label>
+                                        <input type="password" id="password" name="password" ngModel placeholder="Ingrese contraseña..." class="form-control">
+                                    </div>
+                                </div>
+                                <div class="footer text-center">
+                                    <button type="submit" class="btn btn-fill btn-info btn-wd">Login</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

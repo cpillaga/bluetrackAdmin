@@ -1,0 +1,250 @@
+<div class="main-content">
+    <div class="card">
+
+
+        <div class="container-fluid">
+            <form #buscar="ngForm" class="form-horizontal" (keyup)="searchEmpresa(buscar);">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-xs-8 col-sm-8 col-md-8">
+                            <h4 class="card-title col-md-5"> Empresas: {{contEmp}}</h4>
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <!-- <div class="input-group no-border" style="margin-top: 15px;"> -->
+                            <input type="text" class="form-control" style="margin-top: 25px;" value="{{ buscarEmp }}" [ngModel]="buscarEmp" id="buscarEmp" name="buscarEmp" placeholder="Buscar...">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <i class="now-ui-icons ui-1_zoom-bold"></i>
+                                </div>
+                            </div>
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="content table-responsive table-full-width">
+                        <p *ngIf="coincidencia == false">No se encontró ninguna coincidencia</p>
+                        <table class="table" *ngIf="coincidencia == true">
+                            <thead>
+                                <tr>
+                                    <!-- <th class="text-left">#</th> -->
+                                    <!-- <th class="text-center">Imagen</th> -->
+                                    <th class="text-center">Razón Social</th>
+                                    <th class="text-center">Represetante</th>
+                                    <th class="text-center">Correo</th>
+                                    <th class="text-center">Fecha Registro</th>
+                                    <!-- <th class="text-center">Estado</th> -->
+                                    <th class="text-right">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngFor="let emp of empresas; let i=index;">
+                                <tr>
+                                    <!-- <td class="text-left">{{i + 1}}</td> -->
+                                    <!-- <td class="text-center">{{emp.img}}</td> -->
+                                    <td class="text-center">{{emp.businessName}}</td>
+                                    <td class="text-center">{{emp.agent}}</td>
+                                    <td class="text-center">{{emp.email}}</td>
+                                    <td class="text-center">{{emp.registration | date: 'dd/MM/yyyy'}}</td>
+                                    <!-- <td class="text-center">{{emp.estado}}</td> -->
+
+                                    <td class="td-actions text-right">
+
+                                        <!-- <a type="button" rel="tooltip" title="Editar" (click)="getData(emp)" data-toggle="modal" data-target="#modalupdEmp" class="btn btn-info btn-simple btn-xs">
+                                            <i class="fa fa-edit"></i>
+                                        </a> -->
+                                        <!--  -->
+                                        <button type="button" *ngIf="emp.status === 'true'" rel="tooltip" title="Eliminar" (click)="desactivarEmp(emp._id)" class="btn btn-danger btn-simple btn-xs">
+                                            <i class="fa fa-close"></i>
+                                        </button>
+                                        <!--  -->
+                                        <button type="button" *ngIf="emp.status === 'false'" rel="tooltip" title="Habilitar" (click)="activarEmp(emp._id)" class="btn btn-success btn-simple btn-xs">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<caption>
+    <a class="btn btn-info btn-round btn-fab" data-toggle="modal" data-target="#modaladdEmp" style="position: fixed; background-color: #2E57A6; bottom: 15px; right: 20px; border-radius: 100% !important; float: right;">
+        <i><img src="assets/img/icons/mas.png" style="padding-bottom: 7px; padding-right: 1px;" /></i>
+    </a>
+</caption>
+
+<!-- Modal para registros nuevos -->
+<div class="modal fade" id="modaladdEmp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <form #addEmp="ngForm" id="addEmp" (ngSubmit)="addEmpresa(addEmp)">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" #closebuttonadd data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                    <h4 class="modal-title" id="myModalLabel">Agregar Empresa</h4>
+                </div>
+                <div class="modal-body ">
+                    <div class="row">
+                        <label class="col-md-2 col-form-label" style="margin-top: 10px;">Ruc:</label>
+                        <div class="col-md-4">
+                            <div class="form-group has-default">
+                                <input type="text" id="ruc" name="ruc" [ngModel]="ruc" class="form-control">
+                            </div>
+                        </div>
+                        <label class="col-md-2 col-form-label" style="margin-top: 10px;">Dirección:</label>
+                        <div class="col-md-4">
+                            <div class="form-group has-default">
+                                <input type="text" id="direccion" name="direccion" ngModel class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <label class="col-md-2 col-form-label" style="margin-top: 10px;">Razón Social:</label>
+                        <div class="col-md-4">
+                            <div class="form-group has-default">
+                                <input type="text" id="razonSoc" name="razonSoc" ngModel class="form-control">
+                            </div>
+                        </div>
+                        <label class="col-md-2 col-form-label" style="margin-top: 10px;">Provincia:</label>
+                        <div class="col-md-4">
+                            <!-- <div class="form-group has-default"> -->
+                            <select id="proveedor" class="form-control custom-select col-md-10" #prov id="provincia" name="provincia" ngModel data-title="Seleccionar" (change)="getCanton(prov.value);" data-style="btn-default btn-block" data-menu-style="dropdown-blue">
+                                    <option value="empty" hidden>Seleccionar</option>
+                                    <option  *ngFor="let prov of provincias"  [value]="prov._id">{{prov.descripcion}}</option>
+                                </select>
+                            <!-- </div> -->
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="col-md-2 col-form-label" style="margin-top: 10px;">Representante:</label>
+                        <div class="col-md-4">
+                            <div class="form-group has-default">
+                                <input type="text" id="representante" name="representante" ngModel class="form-control">
+                            </div>
+                        </div>
+                        <label class="col-md-2 col-form-label" style="margin-top: 10px;">Cantón:</label>
+                        <div class="col-md-4">
+                            <!-- <div class="form-group has-default"> -->
+                            <select id="proveedor" class="form-control custom-select col-md-10" id="canton" name="canton" ngModel data-title="Seleccionar" data-style="btn-default btn-block" data-menu-style="dropdown-blue">
+                                    <option value="empty" hidden>Seleccionar</option>
+                                    <option  *ngFor="let cant of cantones" [value]="cant._id">{{cant.description}}</option>
+                                </select>
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-2 col-form-label" style="margin-top: 10px;">Correo:</label>
+                        <div class="col-md-4">
+                            <div class="form-group has-default">
+                                <input type="email" id="correo" name="correo" ngModel class="form-control">
+                            </div>
+                        </div>
+                        <label class="col-md-2 col-form-label" style="margin-top: 10px;">Usuario:</label>
+                        <div class="col-md-4">
+                            <div class="form-group has-default">
+                                <input type="text" id="usuario" name="usuario" ngModel class="form-control" onkeypress="return filterUser(event,this);">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-2 col-form-label" style="margin-top: 10px;">Teléfono:</label>
+                        <div class="col-md-4">
+                            <div class="form-group has-default">
+                                <input type="text" id="telefono" name="telefono" ngModel class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-fill btn-info" id="add_Emp" name="add_Emp">
+                    Agregar
+                </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal para modificar  -->
+<!-- <div class="modal fade" *ngIf="dataUpd == true" id="modalupdEmp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" style="width: 400px;" role="document">
+        <form #updEmp="ngForm" id="updEmp" (ngSubmit)="updEmpleado(updEmp)">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" #closebuttonupd data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                    <h4 class="modal-title" id="myModalLabel">Modificar Personal</h4>
+                </div>
+                <div class="modal-body ">
+                    <div class="row">
+                        <label class="col-md-3 col-form-label" style="margin-top: 10px;">Nombre:</label>
+                        <div class="col-md-8">
+                            <div class="form-group has-default">
+                                <input type="hidden" id="_id" name="_id" [ngModel]="_id" style="text-transform:uppercase;" class="form-control">
+                                <input type="text" id="nombre" name="nombre" [ngModel]="nombre" style="text-transform:uppercase;" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-3 col-form-label" style="margin-top: 10px;">Teléfono:</label>
+                        <div class="col-md-9">
+                            <div class="form-group has-default">
+                                <input type="text" id="telefono" name="telefono" [ngModel]="telefono" style="text-transform:uppercase;" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-3 col-form-label" style="margin-top: 10px;">Dirección:</label>
+                        <div class="col-md-9">
+                            <div class="form-group has-default">
+                                <input type="text" id="direccion" name="direccion" [ngModel]="direccion" style="text-transform:uppercase;" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-3 col-form-label" style="margin-top: 10px;">Correo:</label>
+                        <div class="col-md-9">
+                            <div class="form-group has-default">
+                                <input type="email" id="correo" name="correo" [ngModel]="correo" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="col-md-3 col-form-label" style="margin-top: 10px;">Rol:</label>
+                        <div class="col-md-9">
+                            <div class="form-group has-default">
+                                <select id="rol" name="rol" [value]="rol" [ngModel]="rol" class="form-control " data-title="Seleccionar" data-style="btn-default btn-block" data-menu-style="dropdown-blue">
+                                    <option value="Administrador">Administrador</option>
+                                    <option value="Operador">Operador</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-fill btn-warning" (click)="restClave()" id="upd_Cat" name="upd_Cat">
+                        Restablecer contraseña
+                    </button>
+                    <button type="submit" class="btn btn-fill btn-info" id="upd_Cat" name="upd_Cat">
+                    Modificar
+                </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div> -->
