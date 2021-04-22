@@ -36,6 +36,7 @@ export class EmpresaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    
     if(localStorage.getItem('tokenABT') == null){
       this.router.navigate(['/login'])
       .then(() => {
